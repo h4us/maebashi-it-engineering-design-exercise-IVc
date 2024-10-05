@@ -32,11 +32,11 @@ void loop() {
   pushCount = (pushCount + swState) % 4;
 
   // シリアルモニタに表示するメッセージ（改行なし）
-  Serial.print("_SW1 State: ");
+  Serial.print("_SW1_State:");
    // シリアルモニタに表示するメッセージ（改行なし） 
   Serial.print(swState);
   // シリアルモニタに表示するメッセージ（改行なし）
-  Serial.print(" , Count: ");
+  Serial.print(",Count:");
    // シリアルモニタに表示するメッセージ（改行あり） 
   Serial.println(pushCount);
 
