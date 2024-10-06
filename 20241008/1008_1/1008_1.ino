@@ -5,19 +5,13 @@
 
 void setup() {
   // _SW1（7番ピン）を入力にする
-  pinMode(_SW1, INPUT); 
-
-  // _SW1（7番ピン）を入力にする・「プルアップ」バージョン
-  // pinMode(_SW1, INPUT_PULLUP);  
+  pinMode(_SW1, INPUT);
 
   // _LED1（8番ピン）を出力にする
   pinMode(_LED1, OUTPUT);
 }
 
-void loop() { 
+void loop() {
   // デジタル入力から読み取ったタクトスイッチの状態を使って、LEDの点灯状態を制御する
-  digitalWrite(_LED1, digitalRead(_SW1)); 
-  
-  // 「!」という記号（論理否定演算子）を使って、押す・離すの挙動を反転させたバージョン
-  // digitalWrite(_LED1, !digitalRead(_SW1)); 
+  digitalWrite(_LED1, digitalRead(_SW1));
 }

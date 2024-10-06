@@ -3,33 +3,16 @@
 #define _SW1 7
 #define _LED1 8
 
-// デジタル入力読み取り用の変数（タクトスイッチの状態を記憶する領域）を設定する
-int swState = 0;
-
 void setup() {
-  // _SW1（7番ピン）を入力にする・「プルアップ」バージョン
-  pinMode(_SW1, INPUT_PULLUP);  
+  // _SW1（7番ピン）を入力にする
+  pinMode(_SW1, INPUT);
 
   // _LED1（8番ピン）を出力にする
   pinMode(_LED1, OUTPUT);
-
-  // シリアルモニタ用の通信の初期化処理
-  Serial.begin(19200);
 }
 
 void loop() {
-  // デジタル入力から読み取ったタクトスイッチの状態を変数に記憶する
-  swState = !digitalRead(_SW1); 
-
-  // シリアルモニタに表示するメッセージ（改行なし）
-  Serial.print("_SW1_State:");
-   // シリアルモニタに表示するメッセージ（改行あり） 
-  Serial.println(swState);
-
-  // 変数を使ってLEDの点灯状態を変える
-  digitalWrite(_LED1, swState); 
-
-  // 200ミリ秒待つ
-  // （待ち時間を入れないと、タクトスイッチを押す・離すの動作による変化が早すぎてわかりにくいので）
-  delay(200); 
+  // デジタル入力から読み取ったタクトスイッチの状態を使って、LEDの点灯状態を制御する
+  // 「!」という記号（論理否定演算子）を使って、押す・離すの挙動を反転させたバージョン
+  digitalWrite(_LED1, !digitalRead(_SW1));
 }

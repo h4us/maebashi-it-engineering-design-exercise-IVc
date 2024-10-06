@@ -1,43 +1,51 @@
 // Arduinoの出力ピンにスケッチ内で使う別名を付ける
-// A0番ピンを _CDS1 という名前に、8番ピンを _LED1 という名前に
-#define _CDS1 A0
+// 7番ピンを _SW1 という名前に、8番ピンを _LED1 という名前に、9番ピンを _LED2 という名前に
+#define _SW1 7
 #define _LED1 8
+#define _LED2 9
 
-// アナログ入力読み取り用の変数（CdSセルの状態を記憶する領域）を設定する
-int cdsVal = 0;
+// デジタル入力読み取り用の変数（タクトスイッチの状態を記憶する領域）を設定する
+int swState = 0;
+
+// カウンタ用の変数（カウントした数を記憶しておく）を設定する
+int pushCount = 0;
 
 void setup() {
-  // _CDS1（A0ピン）を入力にする
-  pinMode(_CDS1, INPUT);  
-  
+   // _SW1（7番ピン）を入力にする・「プルアップ」バージョン
+  pinMode(_SW1, INPUT_PULLUP);  
+
   // _LED1（8番ピン）を出力にする
   pinMode(_LED1, OUTPUT);
+  // _LED2（9番ピン）を出力にする
+  pinMode(_LED2, OUTPUT); 
 
   // シリアルモニタ用の通信の初期化処理
   Serial.begin(19200);
 }
 
-void loop() {
-  // アナログ入力から読み取ったCdSセルの状態を変数に記憶する
-  // (CdSセルにあたっている光の強さに対応する 0 ~ 1023 までの数値)
-  cdsVal = analogRead(_CDS1); 
+void loop() {  
+  // デジタル入力から読み取ったタクトスイッチの状態を変数に記憶する
+  swState = !digitalRead(_SW1);
+
+  // タクトスイッチが押されたら1カウントアップする
+  // 「%」という記号（余剰演算子）を使って、0・1・2・3と数えたらまた0に戻るようにする
+  pushCount = (pushCount + swState) % 4;
 
   // シリアルモニタに表示するメッセージ（改行なし）
-  Serial.print("_CDS1_Value:");
+  Serial.print("_SW1_State:");
+   // シリアルモニタに表示するメッセージ（改行なし） 
+  Serial.print(swState);
+  // シリアルモニタに表示するメッセージ（改行なし）
+  Serial.print(",Count:");
    // シリアルモニタに表示するメッセージ（改行あり） 
-  Serial.println(cdsVal);
+  Serial.println(pushCount);
 
-  if(cdsVal < 100) {
-    // アナログ入力の値が100より低い場合にLEDを点灯
-    //（CdSセルに対してあまり光が当たっていない状態）
-    digitalWrite(_LED1, HIGH);
-  } else {
-    // アナログ入力の値が100より高い場合にLEDを消灯
-    //（CdSセルに対してある程度光が当たっている状態）
-    digitalWrite(_LED1, LOW);
-  }
-
-  // 100ミリ秒待つ
-  // （待ち時間を入れないと、変化が早すぎてわかりにくいので）
-  delay(100); 
+  // 「&」という記号をビット演算子として使って、特定のカウントの時だけ点灯させる
+  // （若干わかりにくい書き方なので、別の方法も後述します）
+  digitalWrite(_LED1, pushCount & 1); // カウントが1・3の時だけ点灯
+  digitalWrite(_LED2, pushCount & 2); // カウントが2・3の時だけ点灯
+  
+  // 200ミリ秒待つ
+  // （待ち時間を入れないと、タクトスイッチを押す・離すの動作によるカウントアップが早すぎてわかりにくいので）
+  delay(200); 
 }
