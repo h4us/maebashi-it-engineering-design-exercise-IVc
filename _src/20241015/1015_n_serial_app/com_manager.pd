@@ -128,8 +128,6 @@
 #X obj 444 58 loadbang;
 #X obj 543 520 print devicename;
 #X obj 747 311 print fudi;
-#X obj 141 46 bng 25 250 50 0 empty empty empty 17 7 0 10 #e4e4e4 #4d4d4d #373737;
-#X msg 274 88 close;
 #X obj 543 554 pack2 a a;
 #X obj 543 586 format %d %s;
 #X obj 543 617 any2symbol;
@@ -187,9 +185,9 @@
 #X connect 35 0 48 0;
 #X connect 36 0 45 1;
 #X connect 36 0 51 0;
-#X connect 36 0 55 1;
+#X connect 36 0 53 1;
 #X connect 36 1 37 0;
-#X connect 36 1 55 0;
+#X connect 36 1 53 0;
 #X connect 38 0 39 1;
 #X connect 39 0 40 0;
 #X connect 39 0 42 0;
@@ -205,8 +203,7 @@
 #X connect 49 0 46 0;
 #X connect 50 0 33 0;
 #X connect 53 0 54 0;
-#X connect 55 0 56 0;
-#X connect 56 0 57 0;
-#X connect 57 0 60 0;
-#X connect 60 0 59 0;
+#X connect 54 0 55 0;
+#X connect 55 0 58 0;
+#X connect 58 0 57 0;
 #X coords 0 0 1 1 181 180 1 0 27;
