@@ -62,7 +62,7 @@ void loop() {
       Serial.print(",Int[0]:");
       Serial.println(_v0);
 
-      analogWrite(_LED1, constrain(_v0, 0, 1023));
+      analogWrite(_LED1, map(_v0, 0, 1023, 0, 254));
     }
 
     if (tmp_perms[1].length() != 0) {
@@ -72,7 +72,7 @@ void loop() {
       Serial.print(",Int[1]:");
       Serial.println(_v1);
 
-      analogWrite(_LED2, constrain(_v1, 0, 1023));
+      analogWrite(_LED2, map(_v1, 0, 1023, 0, 254));
     }
 
     newData = false;
