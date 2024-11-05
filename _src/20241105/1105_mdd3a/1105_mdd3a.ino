@@ -3,14 +3,16 @@
 #include <Servo.h>
 
 #if (defined(PICO_RP2040))
-#define _SRV_OUTPIN 0
+#define _PWM1 0
+#define _PWM2 1
+#define _PWM3 2
+#define _PWM4 3
 #else
-#define _SRV_OUTPIN 9
+#define _PWM1 9
+#define _PWM2 10
+#define _PWM3 11
+#define _PWM4 12
 #endif
-
-Servo srv1;
-
-int angle = 90;
 
 unsigned long tick = 0;
 
@@ -20,14 +22,15 @@ char receivedChars[numChars];
 bool newData = false;
 
 void setup() {
-  pinMode(_SRV_OUTPIN, OUTPUT);
+  pinMode(_PWM1, OUTPUT);
+  pinMode(_PWM2, OUTPUT);
+  pinMode(_PWM3, OUTPUT);
+  pinMode(_PWM4, OUTPUT);
 
-  // 指定可能なパルス幅の範囲が異なる場合は初期化時に指定する。
-  // サーボモーター（FEETECH FT90B）の初期化。
-  srv1.attach(_SRV_OUTPIN, 500, 2500);
-  // サーボモーター（Tower Pro SG-90）の初期化。
-  // srv1.attach(_SRV_OUTPIN, 500, 2400);
-  srv1.write(angle);
+  analogWrite(_PWM1, 0);
+  analogWrite(_PWM2, 0);
+  analogWrite(_PWM3, 0);
+  analogWrite(_PWM4, 0);
 
   Serial.begin(57600);
 }
@@ -63,14 +66,43 @@ void loop() {
     Serial.println(tmp_str);
 
     if (tmp_perms[0].length() != 0) {
-      angle = map(tmp_perms[0].toInt(), 0, 1023, 0, 180);
+      int m1 = map(tmp_perms[0].toInt(), 0, 1023, -254, 254);
 
       Serial.print("Raw[0]:");
       Serial.print(tmp_perms[0]);
-      Serial.print(",Angle:");
-      Serial.println(angle);
+      Serial.print(",m1_status:");
+      Serial.println(m1);
 
-      srv1.write(angle);
+      if (m1 < 0) {
+        analogWrite(_PWM1, m1);
+        analogWrite(_PWM2, 0);
+      } else if (m1 == 0) {
+        analogWrite(_PWM1, 0);
+        analogWrite(_PWM2, 0);
+      } else {
+        analogWrite(_PWM1, 0);
+        analogWrite(_PWM2, m1);
+      }
+    }
+
+    if (tmp_perms[1].length() != 0) {
+      int m2 = map(tmp_perms[1].toInt(), 0, 1023, -254, 254);
+
+      Serial.print("Raw[1]:");
+      Serial.print(tmp_perms[1]);
+      Serial.print(",m1_status:");
+      Serial.println(m2);
+
+      if (m2 < 0) {
+        analogWrite(_PWM3, m2);
+        analogWrite(_PWM4, 0);
+      } else if (m2 == 0) {
+        analogWrite(_PWM3, 0);
+        analogWrite(_PWM4, 0);
+      } else {
+        analogWrite(_PWM3, 0);
+        analogWrite(_PWM4, m2);
+      }
     }
 
     newData = false;
