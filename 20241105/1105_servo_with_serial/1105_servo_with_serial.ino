@@ -22,9 +22,11 @@ bool newData = false;
 void setup() {
   pinMode(_SRV_OUTPIN, OUTPUT);
 
-  // サーボモーター（SG90）の初期化。
   // 指定可能なパルス幅の範囲が異なる場合は初期化時に指定する。
-  srv1.attach(_SRV_OUTPIN, 500, 2400);
+  // サーボモーター（FEETECH FT90B）の初期化。
+  srv1.attach(_SRV_OUTPIN, 500, 2500);
+  // サーボモーター（Tower Pro SG-90）の初期化。
+  // srv1.attach(_SRV_OUTPIN, 500, 2400);
   srv1.write(angle);
 
   Serial.begin(57600);

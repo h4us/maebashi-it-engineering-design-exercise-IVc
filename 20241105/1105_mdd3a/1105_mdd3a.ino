@@ -1,6 +1,4 @@
-/* 1105_servo_with_serial */
-
-#include <Servo.h>
+/* 1105_mdd3a.ino */
 
 #if (defined(PICO_RP2040))
 #define _PWM1 0
