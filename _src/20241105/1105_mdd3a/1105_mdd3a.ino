@@ -1,4 +1,4 @@
-/* 1105_servo_with_serial */
+/* 1105_servo_with_serial.ino */
 
 #include <Servo.h>
 
