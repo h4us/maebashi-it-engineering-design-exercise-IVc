@@ -9,9 +9,10 @@
 #define _PWM_OUTPIN 0
 #endif
 
-// 各人の設定に変更
+// 各自ネットワークの設定に応じて変更
 String ssid = "ssid";
 String pw = "password";
+// ホストPCのIPアドレスに変更
 String osc_dest = "192.168.1.1";
 
 int brightness = 0;
@@ -24,7 +25,7 @@ IPAddress localIP;
 void setup() {
   Serial.begin(57600);
 
-  WiFi.begin(ssid, pw);
+  WiFi.begin(ssid.c_str(), pw.c_str());
 
   int timeout = 0;
 
@@ -55,7 +56,7 @@ void setup() {
 
 void loop() {
   unsigned long _now = millis();
-  
+
   if ((_now - tick2) > 10) {
     tick2 = _now;
     analogWrite(_PWM_OUTPIN, constrain(brightness, 0, 254));
