@@ -38,14 +38,15 @@ void setup() {
   }
 
   localIP = WiFi.localIP();
+  Serial.println(localIP.toString());
 
   pinMode(_PWM_OUTPIN, OUTPUT);
 
   OscWiFi.subscribe(12000, "/brightness", [&](int& val) {
     brightness = val;
 
-    OscWiFi.send(osc_dest, 12000, "/reply", brightness, localIP.toString());
-    Serial.println("ssid:" + ssid + ", osc_dest:" + osc_dest + ", brightness:" + brightness);
+    OscWiFi.send(osc_dest, 12000, "/reply", brightness);
+    Serial.println("brightness:" + brightness);
   });
 
   Serial.println("Enter loop");
@@ -53,16 +54,22 @@ void setup() {
 
 
 void loop() {
-  if ((millis() - tick) > 33) {
-    tick2 = millis();
+  unsigned long _now = millis();
+  
+  if ((_now - tick2) > 10) {
+    tick2 = _now;
     analogWrite(_PWM_OUTPIN, constrain(brightness, 0, 254));
   }
 
-  if ((millis() - tick) > 1000) {
-    tick = millis();
-    Serial.println("tick", localIP.toString());
+  if ((_now - tick) > 1000) {
+    tick = _now;
+
+    OscWiFi.send(osc_dest, 12000, "/ping", localIP.toString());
+
+    Serial.print("ping: ");
+    Serial.println(localIP.toString());
   }
 
   OscWiFi.update();
-  delay(33);
+  delay(10);
 }
