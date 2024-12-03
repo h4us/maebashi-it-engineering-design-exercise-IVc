@@ -1,0 +1,18 @@
+#N canvas 827 239 527 327 12;
+#X declare -path .;
+#X obj 67 26 declare -path .;
+#X obj 67 58 com_manager;
+#X obj 67 440 osc.send 12000;
+#X obj 67 335 int;
+#X floatatom 67 367 5 0 0 0 - - - 12;
+#X obj 67 480 print osc_1;
+#X msg 67 399 /light \$1;
+#X obj 67 294 tgl 25 0 empty empty empty 17 7 0 10 #e4e4e4 #4d4d4d #373737 0 1;
+#X obj 67 257 unpack f f f;
+#X connect 1 0 8 0;
+#X connect 2 0 5 0;
+#X connect 3 0 4 0;
+#X connect 4 0 6 0;
+#X connect 6 0 2 0;
+#X connect 7 0 3 0;
+#X connect 8 0 7 0;
