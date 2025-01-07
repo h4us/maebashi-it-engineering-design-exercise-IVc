@@ -1,0 +1,8 @@
+<script>
+    window.onload = () => {
+      electron.messaging.on((event, payload) => {
+        // console.info(event, payload);
+        console.info(payload);
+      });
+    };
+</script>

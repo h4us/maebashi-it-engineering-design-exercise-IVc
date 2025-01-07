@@ -1,0 +1,38 @@
+{
+  "name": "serial2kbd",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "main/index.js",
+  "productName": "serial2kbd",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dev": "nodemon --exec electron .",
+    "dist": "electron-builder"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "build": {
+    "asar": true,
+    "files": [
+      "main",
+      "renderer"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8",
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "@nut-tree-fork/nut-js": "^4.2.3",
+    "electron-is-dev": "^3.0.1",
+    "electron-store": "^10.0.0",
+    "encoding-japanese": "^2.2.0",
+    "lodash-es": "^4.17.21",
+    "luxon": "^3.5.0",
+    "node-osc": "^9.1.4",
+    "serialport": "^12.0.0"
+  }
+}
