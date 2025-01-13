@@ -50,7 +50,7 @@ void mouseMoved() {
 void mousePressed() {
   // クリックした際のマウスのX座標でサーボの角度を指定（1 - 180）
   String data = "";
-  
+
   angle = int(map(mouseX, 0, 1023, 0, 180));
   data  = str(angle) + ";\r";
 
@@ -58,12 +58,12 @@ void mousePressed() {
 }
 
 void keyPressed() {
-  // サーボのパラメーターをリセット
+  // Space キーでサーボのパラメーターをリセット
   if (keyCode == 32) {
     angle = 0;
     interval = 4;
     step = 4;
-    
+
     port.write("0 10 4;\r");
   }
 }
