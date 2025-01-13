@@ -2,7 +2,7 @@ import processing.serial.*;
 
 Serial port;
 int step = 4;
-int interval = 4;
+int interval = 2000;
 int angle = 0;
 
 int bgCol = 255;
@@ -29,9 +29,9 @@ void mouseMoved() {
   String data = "";
 
   if (keyPressed && (keyCode == CONTROL || keyCode == SHIFT)) {
-    // Shift もしくは Ctrl キーを押しながら。更新間隔を指定（1 - 100、値が低いほど更新間隔が短い）
+    // Shift もしくは Ctrl キーを押しながら。更新間隔を指定（1000 - 50000、値が低いほど更新間隔が短い）
     bgCol = 0;
-    interval = int(map(mouseY, 0, 1023, 1, 100));
+    interval = int(map(mouseY, 0, 1023, 1000, 50000));
     data  = str(angle) +  " " + str(interval) + ";\r";
   } else if (keyPressed && keyCode == ALT) {
     // Alt キーを押しながら。移動ステップを指定（1 - 100、値が高いほど一度の更新で移動する角度が大きい）
@@ -61,9 +61,9 @@ void keyPressed() {
   // Space キーでサーボのパラメーターをリセット
   if (keyCode == 32) {
     angle = 0;
-    interval = 4;
+    interval = 2000;
     step = 4;
 
-    port.write("0 10 4;\r");
+    port.write("0 2000 4;\r");
   }
 }

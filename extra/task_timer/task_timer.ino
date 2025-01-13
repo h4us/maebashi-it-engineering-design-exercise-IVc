@@ -1,13 +1,40 @@
-/* servo_with_speed.ino */
+/* task_timer.ino */
 
 #include <Servo.h>
 
 #if (defined(PICO_RP2040))
+#define _PWM_OUTPIN 1
 #define _SRV_OUTPIN 0
 #else
+#define _PWM_OUTPIN 10
 #define _SRV_OUTPIN 9
 #endif
 
+
+class TaskTimer {
+  unsigned long lastUpdate;
+  int updateInterval;
+
+public:
+  TaskTimer() {};
+  ~TaskTimer() {};
+
+  void resetTimer() { lastUpdate = 0; }
+  void setInterval(int i) { updateInterval = i; }
+
+  void setup(int interval = 10) {
+    updateInterval = interval;
+  }
+
+  bool update() {
+    if((millis() - lastUpdate) >= updateInterval) {
+      lastUpdate = millis();
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
 
 class Sweeper {
   unsigned long lastUpdate;
@@ -58,7 +85,11 @@ public:
 const byte numChars = 64;
 char receivedChars[numChars];
 
+int deg1 = 0, deg2 = 0;
+int it1 = 10, it2 = 20;
+
 Sweeper srv1;
+TaskTimer t1, t2;
 
 bool recvWithEndMarker(char endMarker = ';') {
   static byte ndx = 0;
@@ -88,11 +119,17 @@ bool recvWithEndMarker(char endMarker = ';') {
 }
 
 void setup() {
+  pinMode(_PWM_OUTPIN, OUTPUT);
+
   // 指定可能なパルス幅の範囲が異なる場合は初期化時に指定する。
   // サーボモーター（FEETECH FT90B）の初期化。
-  srv1.setup(_SRV_OUTPIN, 500, 2500);
+  srv1.setup(_SRV_OUTPIN, 500, 2500, 3000);
+  srv1.setTick(1);
   // サーボモーター（Tower Pro SG-90）の初期化。
   // srv1.setup(_SRV_OUTPIN, 500, 2400);
+
+  t1.setup(it1);
+  t2.setup(it2);
 
   Serial.begin(57600);
 }
@@ -102,9 +139,9 @@ void loop() {
 
   if (newData == true) {
     int sidx = 0, pidx = 0;
-    int dataSize = 3;
+    int dataSize = 2;
     String tmp_str = String(receivedChars);
-    String tmp_perms[dataSize] = { "", "", "" };
+    String tmp_perms[dataSize] = { "", "" };
 
     while (true) {
       int fidx = tmp_str.indexOf(' ', sidx);
@@ -129,31 +166,26 @@ void loop() {
     Serial.println(tmp_str);
 
     if (tmp_perms[0].length() != 0) {
-      int angle_or_pwidth = constrain(tmp_perms[0].toInt(), 0, 180);
-
-      Serial.print("Angle:");
-      Serial.println(angle_or_pwidth);
-
-      srv1.write(angle_or_pwidth);
+      it1 = constrain(tmp_perms[0].toInt(), 1, 300);
+      t1.setInterval(it1);
+      t1.resetTimer();
     }
 
     if (tmp_perms[1].length() != 0) {
-      int interval = constrain(tmp_perms[1].toInt(), 1000, 50000);
-
-      Serial.print("interval:");
-      Serial.println(interval);
-
-      srv1.setInterval(interval);
+      it2 = constrain(tmp_perms[1].toInt(), 1, 300);
+      t2.setInterval(it2);
+      t2.resetTimer();
     }
+  }
 
-    if (tmp_perms[2].length() != 0) {
-      int tick = constrain(tmp_perms[2].toInt(), 1, 100);
+  if (t1.update()) {
+    deg1 = (deg1 + 1) % 180;
+    analogWrite(_PWM_OUTPIN, int(abs(254 * cos(deg1 * M_PI / 180.0))));
+  }
 
-      Serial.print("tick:");
-      Serial.println(tick);
-
-      srv1.setTick(tick);
-    }
+  if (t2.update()) {
+    deg2 = (deg2 + 1) % 180;
+    srv1.setAngle(int(abs(180 * cos(deg2 * M_PI / 180.0))));
   }
 
   srv1.update();
