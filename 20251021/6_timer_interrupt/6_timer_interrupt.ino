@@ -44,6 +44,8 @@ void setup() {
 }
 
 void loop() {
+  // - メインループ内で0.5秒間隔で外付けLEDを点滅させる
+  // - 外部割り込み内での処理は基本的にメインループ内の delay() の影響を受けない
   digitalWrite(LED_OUT_1, ledOut);
   ledOut = !ledOut;
   delay(500);
