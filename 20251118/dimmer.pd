@@ -1,0 +1,12 @@
+#N canvas 827 239 734 565 12;
+#X floatatom 117 241 5 0 0 0 - - - 12;
+#X obj 117 294 comport 0 9600;
+#X obj 120 83 vsl 17 128 0 255 0 0 empty empty empty 0 -9 0 10 #e4e4e4 #4d4d4d #373737 0 1;
+#X msg 189 240 open \$1;
+#X obj 189 205 hradio 20 1 0 4 empty empty empty 0 -8 0 10 #e4e4e4 #4d4d4d #373737 0;
+#X msg 260 240 devices;
+#X connect 0 0 1 0;
+#X connect 2 0 0 0;
+#X connect 3 0 1 0;
+#X connect 4 0 3 0;
+#X connect 5 0 1 0;
