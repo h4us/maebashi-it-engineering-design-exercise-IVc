@@ -8,8 +8,8 @@ ArduinoLEDMatrix matrix;
 
 int status = WL_IDLE_STATUS;
 
-#define SECRET_SSID "arduino_wifi_ap_"
-#define SECRET_PASS "1234567890"
+#define SECRET_SSID "arduino_wifi_ap_" // SSIDが重複するとややこしいので、各自学籍番号などユニークなものに変更する
+#define SECRET_PASS "1234567890" // 必要であればPWも変える
 
 char ssid[] = SECRET_SSID; // your network SSID (name)
 char pass[] = SECRET_PASS; // your network password (use for WPA, or use as key for WEP)
