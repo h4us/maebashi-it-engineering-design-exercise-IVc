@@ -1,4 +1,4 @@
-/* 1015_n_serial.ino */
+/* pairvalue.ino */
 
 // Raspberry Pi Pico W: GPIO16番ピンを _SW1 という名前に、GPIO15番ピンを _LED1 という名前に
 // Arduino UNO: 7番ピンを _SW1 という名前に、9番ピンを _LED1 という名前に
@@ -20,6 +20,7 @@ bool newData = false;
 
 void setup() {
   pinMode(_LED1, OUTPUT);
+  pinMode(_LED2, OUTPUT);
 
   Serial.begin(57600);
 }
@@ -52,7 +53,7 @@ void loop() {
       }
     }
 
-    Serial.println(tmp_str);
+    // Serial.println(tmp_str);
 
     if (tmp_perms[0].length() != 0) {
       int _v0 = tmp_perms[0].toInt();
