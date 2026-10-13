@@ -21,6 +21,8 @@
   Modified by Takanobu Inafuku / inafact
  */
 
+#include "WiFiS3.h"
+
 // - ユニークな文字列に変更する
 #define SECRET_SSID "UNIQUE_SSID_NAME";
 // - パスワードを変更する場合ば8文字以上
